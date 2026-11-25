@@ -1,0 +1,57 @@
+{
+  "manifest_version": 3,
+  "name": "Google QR 自动降级短信助手（修复版）",
+  "version": "2.5.0",
+  "description": "修复版：降级到短信验证后输入手机号报错的问题。内置自动诊断引擎：扩展自己捕获失败请求、自己分析原因，右下角面板直接显示诊断结论。",
+  "permissions": [
+    "declarativeNetRequest",
+    "declarativeNetRequestWithHostAccess",
+    "scripting",
+    "storage",
+    "webRequest"
+  ],
+  "host_permissions": [
+    "https://accounts.google.com/*",
+    "https://accounts.link.google/*",
+    "https://console.cloud.google.com/*",
+    "https://g.co/*",
+    "https://www.google.com/*"
+  ],
+  "background": {
+    "service_worker": "background.js"
+  },
+  "content_scripts": [
+    {
+      "matches": [
+        "https://accounts.google.com/*"
+      ],
+      "js": [
+        "ua_spoof.js",
+        "net_recorder.js",
+        "island_parser.js"
+      ],
+      "run_at": "document_start",
+      "world": "MAIN",
+      "all_frames": true
+    },
+    {
+      "matches": [
+        "https://accounts.google.com/*"
+      ],
+      "js": [
+        "diagnostics.js"
+      ],
+      "run_at": "document_start"
+    },
+    {
+      "matches": [
+        "https://accounts.google.com/*",
+        "https://console.cloud.google.com/*"
+      ],
+      "js": [
+        "content.js"
+      ],
+      "run_at": "document_start"
+    }
+  ]
+}
